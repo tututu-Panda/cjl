@@ -118,7 +118,11 @@ export default {
           token: that.token
         })
         .then(response => {
-          alert(response.data.msg);
+          this.$message({
+            showClose: true,
+            message: '退出成功！',
+            type: 'success'
+          });
           if (response.data.status == 1) {
             this.$store.commit("changeIsSignIn", 0);
             this.$store.commit("changeIndex", "1");

@@ -99,7 +99,11 @@ export default {
           avatar: that.avatar
         })
         .then(response => {
-          alert(response.data.msg);
+          this.$message({
+            showClose: true,
+            message: '退出成功！',
+            type: 'success'
+          });
           if (response.data.status == 1) {
             localStorage.setItem("nickName", response.data.nickName);
             localStorage.setItem("avatar", response.data.avatar);

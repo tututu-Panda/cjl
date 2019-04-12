@@ -85,11 +85,19 @@ export default {
           nickName: that.nickName
         })
         .then(response => {
-          that.$message({
-            type: "success",
+          if(response.data.status === 0){
+            that.$message({
+            type: "warning",
             message: response.data.msg
           });
-          if (response.data.status == 1) {
+          }else{
+            that.$message({
+              type: "success",
+              message: response.data.msg
+            });
+
+          }
+          if (response.data.status === 1) {
             that.back();
           }
         })
@@ -124,8 +132,7 @@ export default {
               this.txtSignIn = true;
               setTimeout(() => {
                 if (type == 1) {
-                  this.$router.push({ name: "ArticleList" }); //admin
-                  // this.$router.push({ name: "mangageIndex" }); //admin
+                  this.$router.push({path : "/admin/dashboard"}); //admin
                 } else if (type == 2) {
                   this.$router.push({ name: "visiter" }); //游客
                 }
