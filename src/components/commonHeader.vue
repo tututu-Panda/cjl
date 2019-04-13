@@ -37,7 +37,8 @@
                   <li><router-link to="/collections">Collections</router-link></li>
                   <li><router-link to="/demo">Demo</router-link></li>
                   <li><router-link to="/about">About</router-link></li>
-                  <li><router-link v-if="isSignIn===1||isSignIn===2" to="/visiter">{{nickName}}</router-link></li>
+                  <li><router-link v-if="isSignIn===1" to="/admin/dashboard" >{{nickName}}</router-link></li>
+                  <li><router-link v-if="isSignIn===2" to="/visiter" >{{nickName}}</router-link></li>
                 </ul>
               </div>
             </transition >

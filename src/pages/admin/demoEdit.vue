@@ -27,7 +27,6 @@ import {checkAdmin} from '../../../static/js/public.js'
 import {webUrl} from "../../../static/js/public.js"
 
   export default {
-    mixins: [checkAdmin],
     data() {
       return {
         title: '',

@@ -92,7 +92,7 @@ export default {
       //保存
       let that = this;
       that.$axios
-        .post(webUrl + "admin/updateUser", {
+        .post(webUrl + "updateUser", {
           name: that.name,
           token: that.token,
           nickName: that.nickName,
@@ -117,7 +117,7 @@ export default {
       //退出
       let that = this;
       that.$axios
-        .post(webUrl + "admin/signOut", {
+        .post(webUrl + "signOut", {
           name: that.name,
           token: that.token
         })

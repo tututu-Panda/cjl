@@ -8,35 +8,64 @@ export  default [
     path:'/admin',
     component:Layout,
     hidden:true,
+    meta:
+    {
+      requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+    },
     children:[
+
       {
         path:'dashboard',
         name:'控制面板',
-        component:() => import('@/pages/admin/dashboard/index')
+        meta:
+        {
+          requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        },
+        component:() => import('@/pages/admin/dashboard/index'),
       },
       {
         path:'list',
         name:'文章列表',
-        component:() => import('@/pages/admin/articleList')
+        meta:
+        {
+          requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        },
+        component:() => import('@/pages/admin/articleList'),
       },
       {
         path: '/admin/edit',
         name: '文章修改',
+        meta:
+        {
+          requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        },
         component:() => import('@/pages/admin/articleEdit')
       },
       {
         path: '/admin/edit/:id',
         name: '文章更新',
+        meta:
+        {
+          requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        },
         component:() => import('@/pages/admin/articleEdit')
       },
       {
         path: '/admin/editt',
         name: 'demo更新',
+        meta:
+        {
+          requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        },
          component:() => import('@/pages/admin/demoEdit')
       },
         {
         path: '/admin/editt/:id',
         name: 'demo更新',
+        meta:
+        {
+          requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        },
          component:() => import('@/pages/admin/demoEdit')
       },
     ]

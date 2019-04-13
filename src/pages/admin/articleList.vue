@@ -1,16 +1,5 @@
 <template>
   <div id="content">
-     <el-header style="text-align: right; font-size: 12px">
-      <el-dropdown>
-        <i class="el-icon-setting" style="margin-right: 15px"></i>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>个人信息</el-dropdown-item>
-          <el-dropdown-item><a @click="signOut" href="javascript:;" class="signOut">退出</a></el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-      <span>王小虎</span>
-    </el-header>
-    <a @click="toHome" href="javascript:;" class="toHome">返回首页</a>
     <h1 class="title">{{type=='article'?'文章列表':'demo列表'}}</h1>
     <div class="tab-box">
       <el-button-group>
@@ -151,7 +140,6 @@ import { checkAdmin } from "../../../static/js/public.js";
 import { webUrl } from "../../../static/js/public.js";
 
 export default {
-  mixins: [checkAdmin],
   data() {
     return {
       articleList: [],
@@ -166,7 +154,6 @@ export default {
     this.token = localStorage.getItem("token");
   },
 
-  beforeCreate: function() {},
   mounted: function() {
     // 获取文章列表
     this.$axios.post(webUrl + "articleList").then(res => {
@@ -180,16 +167,14 @@ export default {
         this.demoList = res.data.reverse();
       }
     });
+
   },
   methods: {
-    toHome: function() {
-      this.$router.replace({ name: "home" });
-    },
     signOut: function(){
       //退出
       let that = this;
       that.$axios
-        .post(webUrl + "admin/signOut", {
+        .post(webUrl + "signOut", {
           name: that.name,
           token: that.token
         })

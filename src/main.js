@@ -23,6 +23,29 @@ Vue.prototype.$axios = axios
 Vue.use(ElementUI)
 Vue.use(mavonEditor)
 
+
+
+/**
+ * 路由管理
+ * 从store里面获取isSignIn数值（1为管理员，2为游客）
+ * 如果当前不是管理员那么不能访问后台页面
+ */
+router.beforeEach((to, from, next) => {
+      console.log(store.state.isSignIn);
+    if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限
+      console.log(store.state.isSignIn);
+        if (store.state.isSignIn == 1) {  // 通过vuex state获取当前的token是否存在
+            next();
+        }
+        else {
+            next('/')
+        }
+    }
+    else {
+        next();
+    }
+})
+
 new Vue({
   el: '#app',
   data () {
@@ -38,5 +61,6 @@ new Vue({
   //    }
   // }
 })
+
 
 

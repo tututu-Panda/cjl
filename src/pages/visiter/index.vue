@@ -34,11 +34,10 @@
 </template>
 
 <script>
-import { imgTo64, checkVisiter, webUrl } from "../../../static/js/public.js";
+import { imgTo64, webUrl } from "../../../static/js/public.js";
 import imgDefault from "../../../static/img/avatar.png";
 
 export default {
-  mixins: [checkVisiter],
   data() {
     return {
       nickName: null,
@@ -113,7 +112,7 @@ export default {
       //退出
       let that = this;
       that.$axios
-        .post(webUrl + "admin/signOut", {
+        .post(webUrl + "signOut", {
           name: that.name,
           token: that.token
         })

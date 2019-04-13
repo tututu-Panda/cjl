@@ -9,7 +9,6 @@
     >
        <el-menu-item index="1">
         <i class="el-icon-menu"></i>
-<!--        <span slot="title">网站管理</span>-->
          <span slot="title"><router-link class="menu-style" :to="{ path: '/admin/dashboard' }">网站管理</router-link></span>
       </el-menu-item>
       <el-menu-item index="2">
@@ -22,10 +21,13 @@
       </el-menu-item>
       <el-menu-item index="4">
         <i class="el-icon-setting"></i>
-<!--        <span slot="title">文章管理</span>-->
-        <span slot="title"><router-link class="menu-style" :to="{ path: '/admin/list' }">文章管理</router-link></span>
+        <span slot="title">标签管理</span>
       </el-menu-item>
       <el-menu-item index="5">
+        <i class="el-icon-setting"></i>
+        <span slot="title"><router-link class="menu-style" :to="{ path: '/admin/list' }">文章管理</router-link></span>
+      </el-menu-item>
+      <el-menu-item index="6">
         <i class="el-icon-setting"></i>
         <span slot="title">用户管理</span>
       </el-menu-item>

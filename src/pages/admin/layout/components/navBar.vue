@@ -1,5 +1,6 @@
 <template>
   <div class="navbar">
+    <el-button @click="toHome"  round>返回首页</el-button>
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
         <img :src="'?imageView2/1/w/80/h/80'" class="user-avatar">
@@ -21,7 +22,7 @@
 
 <script>
 
-import { imgTo64, checkVisiter, webUrl } from "../../../../../static/js/public.js";
+import { webUrl } from "../../../../../static/js/public.js";
 
 export default {
 
@@ -34,11 +35,14 @@ export default {
     this.token = localStorage.getItem("token");
   },
   methods: {
+    toHome: function() {
+      this.$router.replace({ name: "home" });
+    },
     logout() {
       //退出
       let that = this;
       that.$axios
-        .post(webUrl + "admin/signOut", {
+        .post(webUrl + "signOut", {
           name: that.name,
           token: that.token
         })

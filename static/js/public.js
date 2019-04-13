@@ -85,52 +85,25 @@ export const getDate = () => {
 
 //mixins========================================================================================
 
-//checkAdmin 检测admin
-export const checkAdmin = {
-    beforeCreate: function () {
-        let user_name = localStorage.getItem("user_name");
-        let token = localStorage.getItem("token");
-        this.$axios.post(webUrl + 'admin/checkUser', { 'user_name': user_name, 'token': token })
-            .then((response) => {
-                if (response.data.status == 0) {
-                    this.$store.commit("changeIsSignIn", 0);
-                    this.$store.commit("changeIndex", '1');
-                    localStorage.clear();
-                    this.$router.replace({ name: 'home' })
-                } else {
-                    if (response.data.type == 1) {
-                        this.$store.commit("changeIsSignIn", 1);//admin
-                    } else if (response.data.type == 2) {
-                        this.$store.commit("changeIsSignIn", 2);//游客
-                        this.$router.replace({ name: 'home' })
-                        this.$store.commit("changeIndex", '1');
-                    }
-                }
-            })
-            .catch((reject) => {
-                console.log(reject)
-            })
-    }
-}
-//checkVisiter 检测游客
-export const checkVisiter = {
-    beforeCreate: function () {
-        let user_name = localStorage.getItem("user_name");
-        let token = localStorage.getItem("token");
-        this.$axios.post(webUrl + 'admin/checkUser', { 'user_name': user_name, 'token': token })
-            .then((response) => {
-                if (response.data.status == 0) {
-                    this.$store.commit("changeIsSignIn", 0);
-                    this.$store.commit("changeIndex", '1');
-                    localStorage.clear();
-                    this.$router.replace({ name: 'home' })
-                }
-            })
-            .catch((reject) => {
-                console.log(reject)
-            })
-    }
-}
+// //checkVisiter 检测游客
+// export const checkVisiter = {
+//     beforeCreate: function () {
+//         let user_name = localStorage.getItem("user_name");
+//         let token = localStorage.getItem("token");
+//         this.$axios.post(webUrl + 'admin/checkUser', { 'user_name': user_name, 'token': token })
+//             .then((response) => {
+//                 if (response.data.status == 0) {
+//                     this.$store.commit("changeIsSignIn", 0);
+//                     this.$store.commit("changeIndex", '1');
+//                     localStorage.clear();
+//                     this.$router.replace({ name: 'home' })
+//                 }
+//             })
+//             .catch((reject) => {
+//                 console.log(reject)
+//             })
+//     }
+// }
 //checkSign登陆情况
 export const checkSign = {
     beforeCreate: function () {

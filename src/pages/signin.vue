@@ -79,7 +79,7 @@ export default {
         return;
       }
       that.$axios
-        .post(webUrl + "admin/signUp", {
+        .post(webUrl + "signUp", {
           name: that.name,
           password: that.password,
           nickName: that.nickName
@@ -109,7 +109,7 @@ export default {
       //登录
       let that = this;
       this.$axios
-        .post(webUrl + "admin/signIn", {
+        .post(webUrl + "signIn", {
           name: this.name,
           password: this.password
         })
@@ -122,6 +122,7 @@ export default {
             localStorage.setItem("user_name", response.data.user_name);
             localStorage.setItem("nickName", response.data.nickName);
             localStorage.setItem("avatar", response.data.avatar);
+            localStorage.setItem("type", type);
             if (type == 1) {
               this.$store.commit("changeIsSignIn", 1); //admin
             } else if (type == 2) {
