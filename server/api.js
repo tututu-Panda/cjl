@@ -5,30 +5,16 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 
 
-// 用户信息更新
-//检测token
-router.post('/api/admin/checkUser', (req, res) => {
-    db.User.find({ name: req.body.user_name, token: req.body.token }, (err, docs) => {
-        if (err) {
-            res.send(err);
-            return
-        }
-        if (docs.length > 0) {
-            let token = req.body.token; // 从body或query或者header中获取token
-            let secretOrPrivateKey = "123456"; // 这是加密的key（密钥）
-
-            jwt.verify(token, secretOrPrivateKey, function (err, decode) {
-                if (err) {  //  时间失效的时候/ 伪造的token          
-                    res.send({ 'status': 0 });
-                } else {
-                    res.send({ 'status': 1, 'type': docs[0]["type"], 'user_name': docs[0]["name"], 'avatar': docs[0]["avatar"], 'nickName': docs[0]["nickName"] });
-                }
-            })
-        } else {
-            res.send({ 'status': 0 });
-        }
-    })
+// 检查用户是否为管理员，不是则不能请求数据
+router.post("/api/admin/*",(req,res,next)=>{
+  // console.log(req.session.type);
+  if(req.session.type != 1){
+    res.send({ 'status': 0, 'info': "不是管理员"});
+  }else{
+    next();
+  }
 });
+
 
 //文章保存
 router.post('/api/admin/saveArticle', (req, res) => {
@@ -111,7 +97,7 @@ router.post('/api/admin/updateDemo', (req, res) => {
             res.send({ 'status': 1, 'msg': '更新成功' })
         })
     })
-})
+});
 // demo删除
 router.post('/api/admin/deleteDemo', (req, res) => {
     db.Demo.remove({ _id: req.body._id }, (err) => {
@@ -121,6 +107,6 @@ router.post('/api/admin/deleteDemo', (req, res) => {
         }
         res.send({ 'status': 1, 'msg': '删除成功' })
     })
-})
+});
 
 module.exports = router;

@@ -3,8 +3,8 @@
     <el-button @click="toHome"  round>返回首页</el-button>
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
-        <img :src="'?imageView2/1/w/80/h/80'" class="user-avatar">
-        <i class="el-icon-caret-bottom"/>
+        <img  v-bind:src="avatar"  class="user-avatar" />
+        <i class="el-icon-caret-bottom"></i>
       </div>
       <el-dropdown-menu slot="dropdown" class="user-dropdown">
         <router-link class="inlineBlock" to="/">
@@ -23,14 +23,31 @@
 <script>
 
 import { webUrl } from "../../../../../static/js/public.js";
+import imgDefault from "../../../../../static/img/avatar.png";
 
 export default {
 
+  data: {
+    avatar:"",
+    name:"",
+    token:"",
+
+  },
   computed: {
+    // nickName:function () {
+    //   return localStorage.getItem("nickName");
+    // },
+    // avatar:function () {
+    //   if(localStorage.getItem("avatar") != null){
+    //     return localStorage.getItem("avatar");
+    //   }
+    // },
+    // user_name:function () {
+    //   return localStorage.getItem("user_name");
+    // }
   },
   created() {
-    this.nickName = localStorage.getItem("nickName");
-    this.avatar = localStorage.getItem("avatar");
+    this.avatar = localStorage.getItem("avatar")=="null"?imgDefault:localStorage.getItem("avatar");
     this.name = localStorage.getItem("user_name");
     this.token = localStorage.getItem("token");
   },

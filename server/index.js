@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser');
 const cors = require('cors');
+var cookieParser = require('cookie-parser');
 const session = require('express-session');
 const express = require('express');
 const api = require('./api');
@@ -15,12 +16,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 // session引入
+// app.use(cookieParser('123456'));
 app.use(session({
-        secret: '123456',
+        secret: 'secret',
         resave: true,
-        saveUninitialized: true
+        cookie:{maxAge: 900000},
+        saveUninitialized: false,
 }));
-
 
 
 // 后台管理api

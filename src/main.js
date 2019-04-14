@@ -31,9 +31,8 @@ Vue.use(mavonEditor)
  * 如果当前不是管理员那么不能访问后台页面
  */
 router.beforeEach((to, from, next) => {
-      console.log(store.state.isSignIn);
     if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限
-      console.log(store.state.isSignIn);
+      //console.log(store.state.isSignIn);
         if (store.state.isSignIn == 1) {  // 通过vuex state获取当前的token是否存在
             next();
         }

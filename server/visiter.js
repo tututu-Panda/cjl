@@ -63,19 +63,47 @@ router.post('/api/signIn', (req, res) => {
             let token = jwt.sign(content, secretOrPrivateKey, {
                 expiresIn: 60 * 60 * 24  // 24小时过期
             });
+            req.session.type = docs[0]["type"];
             docs[0].token = token;
             db.User(docs[0]).save(function (err) {
                 if (err) {
-                    res.status(500).send()
+                    res.status(500).send();
                     return
                 }
                 res.send({ 'status': 1, 'msg': '登陆成功', 'token': docs[0].token, 'user_name': docs[0]["name"], 'type': docs[0]["type"], 'nickName': docs[0]["nickName"], 'avatar': docs[0]["avatar"] })
+                // console.log("tttt"+ req.session.type)
             })
         } else {
             res.send({ 'status': 0, 'msg': '登录失败' });
         }
     })
-})
+});
+
+//检测token
+router.post('/api/checkUser', (req, res) => {
+    db.User.find({ name: req.body.user_name, token: req.body.token }, (err, docs) => {
+        if (err) {
+            res.send(err);
+            return
+        }
+        if (docs.length > 0) {
+            let token = req.body.token; // 从body或query或者header中获取token
+            let secretOrPrivateKey = "123456"; // 这是加密的key（密钥）
+
+            jwt.verify(token, secretOrPrivateKey, function (err, decode) {
+                if (err) {  //  时间失效的时候/ 伪造的token
+                    res.send({ 'status': 0 });
+                } else {
+                    res.send({ 'status': 1, 'type': docs[0]["type"], 'user_name': docs[0]["name"], 'avatar': docs[0]["avatar"], 'nickName': docs[0]["nickName"] });
+                }
+            })
+        } else {
+            res.send({ 'status': 0 });
+        }
+    })
+});
+
+
 // 退出
 router.post('/api/signOut', (req, res) => {
     db.User.find({ name: req.body.name, token: req.body.token }, (err, docs) => {
@@ -86,9 +114,10 @@ router.post('/api/signOut', (req, res) => {
             docs[0].token = '';
             db.User(docs[0]).save(function (err) {
                 if (err) {
-                    res.status(500).send()
+                    res.status(500).send();
                     return
                 }
+                req.session.type = null;
                 res.send({ 'status': 1, 'msg': '退出成功' })
             })
         } else {
@@ -190,7 +219,8 @@ router.post('/api/comment/reply', (req, res) => {
 
 //获取所有文章列表
 router.post('/api/articleList', (req, res) => {
-    db.Article.find({}, (err, data) => {
+  // console.log("---"+req.session.type);
+    db.Article.find({}, (err, data) => {1
         if (err) {
             res.send(err);
             return
