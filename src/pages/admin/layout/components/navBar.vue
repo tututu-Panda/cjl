@@ -34,17 +34,6 @@ export default {
 
   },
   computed: {
-    // nickName:function () {
-    //   return localStorage.getItem("nickName");
-    // },
-    // avatar:function () {
-    //   if(localStorage.getItem("avatar") != null){
-    //     return localStorage.getItem("avatar");
-    //   }
-    // },
-    // user_name:function () {
-    //   return localStorage.getItem("user_name");
-    // }
   },
   created() {
     this.avatar = localStorage.getItem("avatar")=="null"?imgDefault:localStorage.getItem("avatar");

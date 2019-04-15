@@ -40,7 +40,7 @@ export default {
     //   console.log(data)
     //   this.items=data.data.categories;
     // })
-    this.$axios.post(webUrl+'articleList',{'type':'categories'})
+    this.$axios.post(webUrl+'categories',{'type':'categories'})
       .then((res)=>{
         this.items=res.data;
       })

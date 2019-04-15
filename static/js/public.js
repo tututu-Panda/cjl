@@ -109,7 +109,7 @@ export const checkSign = {
     beforeCreate: function () {
         let user_name = localStorage.getItem("user_name");
         let token = localStorage.getItem("token");
-        this.$axios.post(webUrl + 'admin/checkUser', { 'user_name': user_name, 'token': token })
+        this.$axios.post(webUrl + '/checkUser', { 'user_name': user_name, 'token': token })
             .then((response) => {
                 if (response.data.status == 0) {
                     this.$store.commit("changeIsSignIn", 0);

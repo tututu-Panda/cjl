@@ -4,7 +4,23 @@
         <el-row>
             <el-col :xs="24" :sm="4" :md="18" :lg="18" :xl="18">
               <div class="main">
-                <list_home :items="items"></list_home>
+                <div>
+                  <div class="card" v-for="(item) in items" :key="item.id">
+                    <router-link :to="'/detail/'+item._id">
+                      <p class="card_title">{{item.title}}</p>
+                      <p class="gist">{{item.gist}}</p>
+                    </router-link>
+                    <p class="date">{{item.date}}</p>
+                  </div>
+                    <el-pagination
+                      background
+                      :page-size="pagesize"
+                      layout="prev, pager, next,total"
+                      @current-change="queryArticle"
+                      :current-page="currentPage"
+                      :total="count">
+                    </el-pagination>
+                </div>
               </div>
             </el-col>
             <el-col :xs="0" :sm="4" :md="6" :lg="6" :xl="6">
@@ -41,22 +57,37 @@
 </template>
 
 <script>
-import List_home from "../components/list_home"
+// import List_home from "../components/list_home"
 import {webUrl} from "../../static/js/public.js"
 export default {
   data(){
     return{
-      items:[]
+      items:[],
+      count:0,
+      currentPage:1,  // 初始化时的页码
+      pagesize:4      // 每页显示的个数
     }
   },
-  components:{
-    List_home,
-  },
+  // components:{
+  //   List_home,
+  // },
   created(){
-    this.$axios.post(webUrl+'articleList')
+    // 首次创建时，请求数据
+    this.$axios.post(webUrl+'articleList',{'pagesize':this.pagesize})
       .then((res)=>{
-        this.items=res.data.reverse();
+        this.items=res.data.data;
+        this.count=res.data.count;
       })
+  },
+  methods:{
+    // 根据页码查询数据
+    queryArticle:function(page){
+      this.$axios.post(webUrl+'articleList',{"page":page,'pagesize':this.pagesize})
+      .then((res)=>{
+        this.items=res.data.data;
+        this.count=res.data.count;
+      })
+    }
   }
 }
 </script>
@@ -123,6 +154,45 @@ export default {
   .main{
     margin:0 20px;
     padding: 20px;
+  }
+}
+</style>
+
+
+<style lang="scss" scoped>
+  .card{
+    margin: 10px 0 0 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    .card_title{
+      font-size: 18px;
+      font-weight: 600;
+      color: #0085A1;
+    }
+    .gist{
+      transition: all .3s;
+      font-style: italic;
+      color:#a3a3a3;
+      margin: 5px 0;
+      &:hover{
+        color: #0085a1;
+      }
+    }
+    .date{
+      font-style: italic;
+      font-family: Lora,'Times New Roman',serif;
+      color: #808080;
+    }
+  }
+@media (min-width: 768px) {//pc
+  .card{
+    padding-bottom: 20px;
+    .card_title{
+      font-size: 26px;
+    }
+    .gist{
+      margin: 10px 0;
+    }
   }
 }
 </style>

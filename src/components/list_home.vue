@@ -7,22 +7,26 @@
     </router-link>
     <p class="date">{{item.date}}</p>
   </div>
+    <el-pagination
+      background
+      :page-size="4"
+      layout="prev, pager, next,total"
+      @:current-change="queryArticle"
+      :current-change="currentPage"
+      :total="count">
+    </el-pagination>
 </div>
 </template>
 
 <script>
 export default {
-  // data(){
-  //   return{
-  //     list:[]
-  //   }
-  // },
-  props: ['items'],  
+  data(){
+    return{
+      currentPage:3
+    }
+  },
+  props: ['items','count'],
   methods:{
-    // goCategory:function(e){
-    //   this.$store.commit('changeIndex','3')
-    //   this.$router.push({ path: '/categories'+e})
-    // }
   },
 }
 </script>

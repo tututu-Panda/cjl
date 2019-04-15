@@ -67,7 +67,10 @@ export default {
       ) {
         if (files[0].size < 2000000) {
           if (typeof FileReader === "undefined") {
-            alert("您的浏览器不支持图片上传，请升级您的浏览器");
+            this.$message({
+              message: '您的浏览器不支持图片上传，请升级您的浏览器',
+              type: 'warning'
+            });
           }
           let reader = new FileReader();
           reader.readAsDataURL(files[0]);
@@ -81,24 +84,37 @@ export default {
             };
           };
         } else {
-          alert("请上传2M以内的图片");
+          this.$message({
+            message: '请上传2M以内的图片',
+            type: 'warning'
+          });
         }
       } else {
-        alert("请上传JPG/PNG格式的图片");
+        this.$message({
+            message: '请上传JPG/PNG格式的图片',
+            type: 'warning'
+        });
       }
     },
     save: function() {
       //保存
       let that = this;
+      let type = "success";
       that.$axios
-        .post(webUrl + "admin/updateUser", {
+        .post(webUrl + "/updateUser", {
           name: that.name,
           token: that.token,
           nickName: that.nickName,
           avatar: that.avatar
         })
         .then(response => {
-          alert(response.data.msg);
+          if(response.data.status == 0){
+            type = "error"
+          }
+          this.$message({
+            message: response.data.msg,
+            type: type
+          });
           if (response.data.status == 1) {
             localStorage.setItem("nickName", response.data.nickName);
             localStorage.setItem("avatar", response.data.avatar);

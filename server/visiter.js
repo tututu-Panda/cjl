@@ -219,91 +219,141 @@ router.post('/api/comment/reply', (req, res) => {
 
 //获取所有文章列表
 router.post('/api/articleList', (req, res) => {
-  // console.log("---"+req.session.type);
-    db.Article.find({}, (err, data) => {1
+  let page = req.body.page;
+  page = page==="undefined"?1:page; // 获取当前页码
+
+  let pageSize = req.body.pagesize;   //  每页显示的文章数
+  pageSize = pageSize==="undefined"?1:pageSize;   //  每页显示的文章数
+
+  // 获取总数
+  const t = db.Article.find({});
+  let count;
+  t.exec(function (err, data) {
+    count = data.length;
+  });
+
+
+  // // 分页查询
+  const m = db.Article.find({});
+  const start = (page - 1) * pageSize;    // 计算查询位置（分页）
+  m.sort({"date":'desc'});
+  m.skip(start);
+  m.limit(pageSize);                      // 查询大小
+
+
+  m.exec((err, data) => {
         if (err) {
             res.send(err);
             return
         }
-        if (req.body.type == 'archives') {//archives结构
-            let arr = [];
-            let data_archives = [];
 
-            for (let i = 0; i < data.length; i++) {
-                let date = data[i]["date"].slice(0, 4);
+        for (let i = 0; i < data.length; i++) {
+            data[i]["comments"] = data[i]["comments"].length;
+            data[i]["content"] = null;
+        }
+        res.send({"data":data,"count":count});
+    })
 
-                if (arr.indexOf(date) == -1) {
-                    let obj = {
-                        "type": date,
-                        "list": [{
-                            "_id": data[i]['_id'],
-                            "date": data[i]['date'],
-                            "title": data[i]['title'],
-                            "category": data[i]['category']
-                        }]
-                    }
-                    data_archives.push(obj);
-                    arr.push(date);
-                } else {
-                    let obj = {
+});
+
+
+// archives结构文章
+router.post('/api/archives',function(req,res){
+
+  const m = db.Article.find({});
+  m.exec((err, data)=>{
+
+    if (err) {
+        res.send(err);
+        return
+    }
+    let arr = [];
+    let data_archives = [];
+
+    for (let i = 0; i < data.length; i++) {
+        let date = data[i]["date"].slice(0, 4);
+
+        if (arr.indexOf(date) == -1) {
+            let obj = {
+                "type": date,
+                "list": [{
+                    "_id": data[i]['_id'],
+                    "date": data[i]['date'],
+                    "title": data[i]['title'],
+                    "category": data[i]['category']
+                }]
+            };
+            data_archives.push(obj);
+            arr.push(date);
+        } else {
+            let obj = {
+                "_id": data[i]['_id'],
+                "date": data[i]['date'],
+                "title": data[i]['title'],
+                "category": data[i]['category']
+            };
+            for (let i = 0; i < data_archives.length; i++) {
+                if (data_archives[i]['type'] == date) {
+                    data_archives[i]['list'].push(obj)
+                }
+            }
+        }
+    }
+    res.send(data_archives);
+  });
+
+});
+
+
+// categories结构文章
+router.post('/api/categories',function(req,res){
+
+  const m = db.Article.find({});
+  m.exec((err, data)=>{
+
+    if (err) {
+        res.send(err);
+        return
+    }
+    let arr = [];
+    let data_categories = [];
+
+    for (let i = 0; i < data.length; i++) {
+        let cates = data[i]["category"];
+
+        for (let i2 = 0; i2 < cates.length; i2++) {
+            if (arr.indexOf(cates[i2]) == -1) {
+                let obj = {
+                    "type": cates[i2],
+                    "list": [{
                         "_id": data[i]['_id'],
                         "date": data[i]['date'],
                         "title": data[i]['title'],
                         "category": data[i]['category']
-                    }
-                    for (let i = 0; i < data_archives.length; i++) {
-                        if (data_archives[i]['type'] == date) {
-                            data_archives[i]['list'].push(obj)
-                        }
-                    }
-                }
-            }
-            res.send(data_archives)
-        } else if (req.body.type == 'categories') {//categories结构
-            let arr = [];
-            let data_categories = [];
-
-            for (let i = 0; i < data.length; i++) {
-                let cates = data[i]["category"];
-
-                for (let i2 = 0; i2 < cates.length; i2++) {
-                    if (arr.indexOf(cates[i2]) == -1) {
-                        let obj = {
-                            "type": cates[i2],
-                            "list": [{
-                                "_id": data[i]['_id'],
-                                "date": data[i]['date'],
-                                "title": data[i]['title'],
-                                "category": data[i]['category']
-                            }]
-                        }
-                        data_categories.push(obj);
-                        arr.push(cates[i2]);
-                    } else {
-                        let obj = {
-                            "_id": data[i]['_id'],
-                            "date": data[i]['date'],
-                            "title": data[i]['title'],
-                            "category": data[i]['category']
-                        }
-                        for (let i3 = 0; i3 < data_categories.length; i3++) {
-                            if (data_categories[i3]['type'] == cates[i2]) {
-                                data_categories[i3]['list'].push(obj)
-                            }
-                        }
+                    }]
+                };
+                data_categories.push(obj);
+                arr.push(cates[i2]);
+            } else {
+                let obj = {
+                    "_id": data[i]['_id'],
+                    "date": data[i]['date'],
+                    "title": data[i]['title'],
+                    "category": data[i]['category']
+                };
+                for (let i3 = 0; i3 < data_categories.length; i3++) {
+                    if (data_categories[i3]['type'] == cates[i2]) {
+                        data_categories[i3]['list'].push(obj)
                     }
                 }
             }
-            res.send(data_categories)
-        } else {//article结构
-            for (let i = 0; i < data.length; i++) {
-                data[i]["comments"] = data[i]["comments"].length;
-                data[i]["content"] = null;
-            }
-            res.send(data)
         }
-    })
-})
+    }
+    res.send(data_categories);
+  });
+
+});
+
 // 文章详情页
 router.get('/api/articleDetail/:id', function (req, res) {
     db.Article.findOne({ _id: req.params.id }, function (err, docs) {
