@@ -412,6 +412,28 @@ router.get('/api/demoDetail/:id', function (req, res) {
 });
 
 
+// 获取网站信息
+router.post('/api/webInfo', (req, res) => {
+  db.Web.find({}, (err, data) => {
+    if(err){
+      res.send(err);
+      return
+    }
+    res.send(data);
+  });
+});
+
+
+// 关于我
+router.post('/api/aboutMe', (req, res) => {
+  db.Aboutme.find({}, (err, data) => {
+    if(err){
+      res.send(err);
+      return
+    }
+    res.send(data);
+  });
+});
 
 
 module.exports = router;

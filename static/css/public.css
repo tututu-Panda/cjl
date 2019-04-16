@@ -5,7 +5,8 @@ body { box-sizing: content-box; font: normal 14px/1.5 \5fae\8f6f\96c5\9ed1, Micr
 html {overflow-y: scroll;}
 :root {overflow-y: auto;overflow-x: hidden;}
 :root body {position: absolute;}
-body {width: 100vw;min-height: 100%;overflow: hidden;background: url(../img/bg.jpg);}
+body {width: 100vw;min-height: 100%;overflow: hidden;}
+.container {width: 100vw;min-height: 100%;overflow: hidden;background: #fff;}
 body.admin{background:url('../img/bg_admin.jpg');}
 @media (min-width: 768px) {body.admin{background-size: cover;}}
 /*合并表格的border*/
@@ -62,6 +63,9 @@ a:focus { -moz-outline-style: none; outline: none; }
 ::selection{background: #0074D9;color: #fff;}
 ::-moz-selection{background: #0074D9;color: #fff;}
 
+.main-container{
+  background-color: #fff;
+}
 
 /*markdown 编辑器 */
 .v-show-content{

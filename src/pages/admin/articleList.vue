@@ -8,11 +8,6 @@
       </el-button-group>
     </div>
 
-    <div v-if="type=='index'">
-<!--      <template src="index.vue"></template>-->
-      <span>test</span>
-    </div>
-
     <div v-if="type=='article'">
       <el-button  @click="handleAdd()" class="btn-add">新增+</el-button>
       <el-table
@@ -68,6 +63,16 @@
             </template>
         </el-table-column>
       </el-table>
+      <div>
+          <el-pagination
+            background
+            :page-size="pagesize"
+            layout="prev, pager, next,total"
+            :current-page="currentPage"
+            @current-change="queryArticle"
+            :total="count">
+          </el-pagination>
+      </div>
     </div>
 
     <div v-if="type=='demo'">
@@ -144,7 +149,10 @@ export default {
     return {
       articleList: [],
       demoList: [],
-      type: "article"
+      type: "article",
+      count:0,
+      currentPage:1,  // 初始化时的页码
+      pagesize:5      // 每页显示的个数
     };
   },
   created() {
@@ -156,9 +164,10 @@ export default {
 
   mounted: function() {
     // 获取文章列表
-    this.$axios.post(webUrl + "articleList").then(res => {
+    this.$axios.post(webUrl + "articleList",{'pagesize':this.pagesize}).then(res => {
       if (res) {
-        this.articleList = res.data.reverse();
+        this.articleList = res.data.data;
+        this.count = res.data.count;
       }
     });
     // 获取demo列表
@@ -193,6 +202,15 @@ export default {
         .catch(reject => {
           console.log(reject);
         });
+    },
+
+    // 请求分页数据
+    queryArticle:function(page){
+      this.$axios.post(webUrl+'articleList',{"page":page,'pagesize':this.pagesize})
+      .then((res)=>{
+        this.articleList=res.data.data;
+        this.count=res.data.count;
+      })
     },
     toggle() {
       //切换

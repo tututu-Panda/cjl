@@ -13,11 +13,11 @@
       </el-menu-item>
       <el-menu-item index="2">
         <i class="el-icon-document"></i>
-        <span slot="title">管理员信息</span>
+        <span slot="title"><router-link class="menu-style" :to="{ path: '/admin/adminInfo' }">管理员信息</router-link></span>
       </el-menu-item>
       <el-menu-item index="3">
         <i class="el-icon-setting"></i>
-        <span slot="title">关于我</span>
+        <span slot="title" ><router-link class="menu-style" :to="{ path: '/admin/aboutMe' }">关于我</router-link></span>
       </el-menu-item>
       <el-menu-item index="4">
         <i class="el-icon-setting"></i>

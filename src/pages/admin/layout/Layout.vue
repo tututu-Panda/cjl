@@ -4,8 +4,9 @@
     <sideBar class="sidebar-container"/>
     <div class="main-container">
       <navBar/>
-<!--      <app-main/>-->
-      <router-view></router-view>
+        <div class="main">
+          <router-view></router-view>
+        </div>
     </div>
   </div>
 </template>
@@ -45,6 +46,7 @@ export default {
       position: fixed;
       top: 0;
     }
+
   }
   .drawer-bg {
     background: #000;
@@ -54,5 +56,8 @@ export default {
     height: 100%;
     position: absolute;
     z-index: 999;
+  }
+  .main{
+    padding:20px;
   }
 </style>

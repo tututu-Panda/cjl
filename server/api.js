@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 
 // 检查用户是否为管理员，不是则不能请求数据
 router.post("/api/admin/*",(req,res,next)=>{
-  // console.log(req.session.type);
+  console.log(req.session.type);
   if(req.session.type != 1){
     res.send({ 'status': 0, 'info': "不是管理员"});
   }else{
@@ -108,5 +108,62 @@ router.post('/api/admin/deleteDemo', (req, res) => {
         res.send({ 'status': 1, 'msg': '删除成功' })
     })
 });
+
+// 更新网站信息
+router.post('/api/admin/saveWebInfo',(req, res)=>{
+    let info = req.body.webInfo;
+    // console.log(info._id);
+    db.Web.find({ _id: info._id }, (err, docs) => {
+        if (err) {
+            return
+        }
+        console.log(docs.length);
+        if(docs.length > 0){
+
+          docs[0].title = info.title;
+          docs[0].matto = info.matto;
+          docs[0].github = info.github;
+          docs[0].zhihu = info.zhihu;
+          docs[0].music = info.music;
+          docs[0].weibo = info.weibo;
+          docs[0].lists = info.lists;
+          db.Web(docs[0]).save(function (err) {
+              if (err) {
+                  res.status(500).send();
+                  return
+              }
+              res.send({ 'status': 1, 'msg': '更新成功' })
+          })
+        }else{
+          res.status(500).send();
+        }
+    })
+});
+
+// 更新关于我
+router.post('/api/admin/saveAboutMe',(req, res)=> {
+  let _id = req.body._id;
+  let content = req.body.content;
+  db.Aboutme.find({ _id: _id }, (err, docs) => {
+        if (err) {
+            return
+        }
+        if(docs.length > 0){
+
+          docs[0].content = content;
+          db.Aboutme(docs[0]).save(function (err) {
+              if (err) {
+                  res.status(500).send();
+                  return
+              }
+              res.send({ 'status': 1, 'msg': '更新成功' })
+          })
+        }else{
+          res.status(500).send();
+        }
+    })
+
+});
+
 
 module.exports = router;

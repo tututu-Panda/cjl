@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     type: String,//1管理员，2游客
     token: String,
     avatar: String
-})
+});
 //文章
 const articleSchema = new mongoose.Schema({
     title: String,
@@ -30,7 +30,7 @@ const articleSchema = new mongoose.Schema({
     gist: String,
     content: String,
     comments: Array
-})
+});
 //demo
 const demoSchema = new mongoose.Schema({
     title: String,
@@ -38,7 +38,25 @@ const demoSchema = new mongoose.Schema({
     file: String,
     pic: String,
     gist: String,
-})
+});
+
+// 网站信息
+const webSchema = new mongoose.Schema({
+  title:String,
+  matto:String,
+  photo:String,
+  github:String,
+  zhihu:String,
+  music:String,
+  weibo:String,
+  lists:Array,
+});
+
+
+// 关于我
+const aboutmeSchema = new mongoose.Schema({
+  content:String,
+});
 /************** 定义模型Model **************/
 // const Models = {
 //     Login : mongoose.model('Login',loginSchema)
@@ -47,7 +65,10 @@ const demoSchema = new mongoose.Schema({
 const Models = {
     User: mongoose.model('User', userSchema),
     Article: mongoose.model('Article', articleSchema),
-    Demo: mongoose.model('Demo', demoSchema)
+    Demo: mongoose.model('Demo', demoSchema),
+    Web : mongoose.model('Web',webSchema),
+    Aboutme : mongoose.model('Aboutme',aboutmeSchema)
+
 }
 
 module.exports = Models;

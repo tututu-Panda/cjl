@@ -24,6 +24,24 @@ export  default [
         component:() => import('@/pages/admin/dashboard/index'),
       },
       {
+        path:'adminInfo',
+        name:'管理员信息',
+        meta:
+        {
+          requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        },
+        component:() => import('@/pages/admin/adminInfo/index'),
+      },
+      {
+        path:'aboutMe',
+        name:'关于我',
+        meta:
+        {
+          requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        },
+        component:() => import('@/pages/admin/aboutMe/index'),
+      },
+      {
         path:'list',
         name:'文章列表',
         meta:

@@ -23,30 +23,33 @@
                 </div>
               </div>
             </el-col>
+
             <el-col :xs="0" :sm="4" :md="6" :lg="6" :xl="6">
               <div class="aside">
                 <div class="card">
                   <p class="title">ABOUT ME</p>
-                  <img class="pic" src="../../static/img/p1.png" alt="">
+
+                  <img class="pic" :src="ruleForm.photo" alt="">
                   <div class="row">
-                    <p>行路有良友，便是捷径。带上我吧，一起去看更大的世界</p>
+                    <p>{{ruleForm.matto}}</p>
                     <div class="icons">
-                      <a href="https://github.com/bestRenekton" target="_blank"><i class="iconfont icon-github"></i></a>
-                      <a href="https://www.zhihu.com/people/yang-pang-zi-40/activities" target="_blank"><i class="iconfont icon-zhihu"></i></a>
-                      <a href="http://music.163.com/#/user/home?id=272667179" target="_blank"><i class="iconfont icon-yinle"></i></a>
-                      <a href="https://weibo.com/u/5746403289?refer_flag=1005055010_&is_all=1" target="_blank"><i class="iconfont icon-weibo"></i></a>
+                      <a :href="ruleForm.github" target="_blank"><i class="iconfont icon-github"></i></a>
+                      <a :href="ruleForm.zhihu" target="_blank"><i class="iconfont icon-zhihu"></i></a>
+                      <a :href="ruleForm.music" target="_blank"><i class="iconfont icon-yinle"></i></a>
+                      <a :href="ruleForm.weibo" target="_blank"><i class="iconfont icon-weibo"></i></a>
                     </div>
                   </div>
                 </div>
                 <div class="card">
                   <p class="title">FRIENDS</p>
                   <div class="row">
-                    <a class="link" href="https://www.yangyuetao.cn" target="_blank">哈维</a>
-                    <a class="link" href="https://www.yangyuetao.cn" target="_blank">的光和热</a>
-                    <a class="link" href="https://www.yangyuetao.cn" target="_blank">Secret Blog</a>
-                    <a class="link" href="https://www.yangyuetao.cn" target="_blank">Secret Blog</a>
-                    <a class="link" href="https://www.yangyuetao.cn" target="_blank">Secret Blog</a>
-                    <a class="link" href="https://www.yangyuetao.cn" target="_blank">Secret Blog</a>
+                    <a class="link" v-for="list in ruleForm.lists" :href="list.link" target="_blank">{{list.name}}</a>
+<!--                    <a class="link" href="https://www.yangyuetao.cn" target="_blank">哈维</a>-->
+<!--                    <a class="link" href="https://www.yangyuetao.cn" target="_blank">的光和热</a>-->
+<!--                    <a class="link" href="https://www.yangyuetao.cn" target="_blank">Secret Blog</a>-->
+<!--                    <a class="link" href="https://www.yangyuetao.cn" target="_blank">Secret Blog</a>-->
+<!--                    <a class="link" href="https://www.yangyuetao.cn" target="_blank">Secret Blog</a>-->
+<!--                    <a class="link" href="https://www.yangyuetao.cn" target="_blank">Secret Blog</a>-->
                   </div>
                 </div>
               </div>
@@ -57,7 +60,6 @@
 </template>
 
 <script>
-// import List_home from "../components/list_home"
 import {webUrl} from "../../static/js/public.js"
 export default {
   data(){
@@ -65,19 +67,38 @@ export default {
       items:[],
       count:0,
       currentPage:1,  // 初始化时的页码
-      pagesize:4      // 每页显示的个数
+      pagesize:4,     // 每页显示的个数
+      // 网站内容
+      ruleForm: {
+        _id:'',
+        title: '',
+        matto: '',
+        photo:'/static/img/p1.2552007.png',
+        github:'',
+        zhihu:'',
+        music:'',
+        weibo:'',
+        lists:[
+          // {name:"wang1", link:"qwe"},
+          // {name:"wang2", link:"qwe"},
+          // {name:"wang3", link:"qwe"},
+        ],
+      },
     }
   },
-  // components:{
-  //   List_home,
-  // },
   created(){
     // 首次创建时，请求数据
     this.$axios.post(webUrl+'articleList',{'pagesize':this.pagesize})
       .then((res)=>{
         this.items=res.data.data;
         this.count=res.data.count;
-      })
+      });
+
+    this.$axios.post(webUrl+'webInfo')
+      .then((res) => {
+        this.ruleForm = res.data[0];
+        console.log(this.ruleForm);
+      });
   },
   methods:{
     // 根据页码查询数据
