@@ -247,7 +247,7 @@
               image.setAttribute("crossOrigin", "anonymous"); //允许图片跨域请求、必须后台也允许
               image.onload = () => {
                 let base64 = imgTo64(image); //使用cavas压缩
-                that.photo = base64;
+                that.ruleForm.photo = base64;
               };
             };
           } else {
