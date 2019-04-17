@@ -419,7 +419,7 @@ router.post('/api/webInfo', (req, res) => {
       res.send(err);
       return
     }
-    res.send(data);
+      res.send(data);
   });
 });
 

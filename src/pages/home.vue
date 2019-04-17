@@ -44,12 +44,6 @@
                   <p class="title">FRIENDS</p>
                   <div class="row">
                     <a class="link" v-for="list in ruleForm.lists" :href="list.link" target="_blank">{{list.name}}</a>
-<!--                    <a class="link" href="https://www.yangyuetao.cn" target="_blank">哈维</a>-->
-<!--                    <a class="link" href="https://www.yangyuetao.cn" target="_blank">的光和热</a>-->
-<!--                    <a class="link" href="https://www.yangyuetao.cn" target="_blank">Secret Blog</a>-->
-<!--                    <a class="link" href="https://www.yangyuetao.cn" target="_blank">Secret Blog</a>-->
-<!--                    <a class="link" href="https://www.yangyuetao.cn" target="_blank">Secret Blog</a>-->
-<!--                    <a class="link" href="https://www.yangyuetao.cn" target="_blank">Secret Blog</a>-->
                   </div>
                 </div>
               </div>
@@ -73,15 +67,12 @@ export default {
         _id:'',
         title: '',
         matto: '',
-        photo:'/static/img/p1.2552007.png',
+        photo:'/static/img/p1.png',
         github:'',
         zhihu:'',
         music:'',
         weibo:'',
         lists:[
-          // {name:"wang1", link:"qwe"},
-          // {name:"wang2", link:"qwe"},
-          // {name:"wang3", link:"qwe"},
         ],
       },
     }
@@ -96,8 +87,10 @@ export default {
 
     this.$axios.post(webUrl+'webInfo')
       .then((res) => {
-        this.ruleForm = res.data[0];
-        console.log(this.ruleForm);
+        if(res.data[0]!=null){
+          this.ruleForm = res.data[0];
+        }
+        // console.log(this.ruleForm);
       });
   },
   methods:{

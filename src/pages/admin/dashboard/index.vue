@@ -25,19 +25,13 @@
     </el-form-item>
 
 
-    <el-form-item label="背景墙">
-      <el-upload
-        class="upload-demo"
-        drag
-        action="https://jsonplaceholder.typicode.com/posts/"
-        :limit="1"
-        >
-        <img v-if="ruleForm.photo" :src="ruleForm.photo" class="avatar">
-        <i v-else class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-      </el-upload>
+    <el-form-item label="背景墙" style="width: 20%" >
+      <label for="upLoad">
+        <img :src="ruleForm.photo" alt="" class="avatar">
+      </label>
+      <input @change="upLoad" id="upLoad" type="file">
     </el-form-item>
+
 
 
     <el-form-item label="友情链接" >
@@ -85,7 +79,7 @@
 
 </template>
 <script>
-  import {webUrl} from "../../../../static/js/public.js"
+  import {imgTo64, webUrl} from "../../../../static/js/public.js"
   export default {
     data() {
       return {
@@ -94,7 +88,7 @@
           _id:'',
           title: '',
           matto: '',
-          photo:'/static/img/p1.2552007.png',
+          photo:'/static/img/p1.png',
           github:'',
           zhihu:'',
           music:'',
@@ -140,8 +134,10 @@
     created(){
        this.$axios.post(webUrl+'webInfo')
       .then((res)=>{
-        // console.log(res.data[0]);
-        this.ruleForm = res.data[0];
+        // console.log(res.data[0]==null);
+        if(res.data[0]!=null){
+          this.ruleForm = res.data[0];
+        }
       })
     },
     methods: {
@@ -222,7 +218,51 @@
           .then(function () {
             that.ruleForm.lists.splice(index);    // 删除父类，需要提前定义
         });
-      }
+      },
+
+
+      //上传背景墙
+      upLoad: function(e) {
+        let that = this;
+        let files = e.target.files || e.dataTransfer.files;
+
+        if (!files.length) return;
+        if (
+          files[0].type.indexOf("png") > -1 ||
+          files[0].type.indexOf("jpg") > -1 ||
+          files[0].type.indexOf("jpeg") > -1
+        ) {
+          if (files[0].size < 2000000) {
+            if (typeof FileReader === "undefined") {
+              this.$message({
+                message: '您的浏览器不支持图片上传，请升级您的浏览器',
+                type: 'warning'
+              });
+            }
+            let reader = new FileReader();
+            reader.readAsDataURL(files[0]);
+            reader.onload = function(e) {
+              let image = new Image();
+              image.src = e.target.result; //原始base64
+              image.setAttribute("crossOrigin", "anonymous"); //允许图片跨域请求、必须后台也允许
+              image.onload = () => {
+                let base64 = imgTo64(image); //使用cavas压缩
+                that.photo = base64;
+              };
+            };
+          } else {
+            this.$message({
+              message: '请上传2M以内的图片',
+              type: 'warning'
+            });
+          }
+        } else {
+          this.$message({
+              message: '请上传JPG/PNG格式的图片',
+              type: 'warning'
+          });
+        }
+      },
     }
   }
 </script>
