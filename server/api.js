@@ -177,24 +177,45 @@ router.post('/api/admin/saveWebInfo',(req, res)=>{
 router.post('/api/admin/saveAboutMe',(req, res)=> {
   let _id = req.body._id;
   let content = req.body.content;
-  db.Aboutme.find({ _id: _id }, (err, docs) => {
-        if (err) {
-            return
-        }
-        if(docs.length > 0){
 
-          docs[0].content = content;
-          db.Aboutme(docs[0]).save(function (err) {
-              if (err) {
-                  res.status(500).send();
-                  return
-              }
-              res.send({ 'status': 1, 'msg': '更新成功' })
-          })
-        }else{
-          res.status(500).send();
-        }
+console.log(_id);
+  // 插入操作
+  if(_id==="" || _id === undefined) {
+    console.log("插入");
+    let aboutme = new db.Aboutme({
+          content: content,
+    });
+    db.Aboutme(aboutme).save(function (err) {
+      if (err) {
+        res.status(500).send();
+        return
+      }
+      res.send({'status': 1, 'msg': '更新成功'})
     })
+
+  }
+  // 更新操作
+  else{
+    db.Aboutme.find({ _id: _id }, (err, docs) => {
+          if (err) {
+              return
+          }
+          if(docs.length > 0){
+
+            docs[0].content = content;
+            db.Aboutme(docs[0]).save(function (err) {
+                if (err) {
+                    res.status(500).send();
+                    return
+                }
+                res.send({ 'status': 1, 'msg': '更新成功' })
+            })
+          }else{
+            res.status(500).send();
+          }
+      })
+  }
+
 
 });
 

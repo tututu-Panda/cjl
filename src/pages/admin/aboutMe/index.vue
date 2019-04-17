@@ -26,8 +26,11 @@
       .then((res)=>{
         // console.log(res.data[0]);
         const obj =res.data[0];
-        this._id = obj._id;
-        this.content = obj.content;
+        if(obj != null){
+          this._id = obj._id;
+          console.log(this._id);
+          this.content = obj.content;
+        }
       })
     },
     methods: {
