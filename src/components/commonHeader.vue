@@ -2,7 +2,7 @@
   <header>
     <div class="wrapper">
       <el-row>
-        <el-col :xs="20" :sm="4" :md="4" :lg="4" :xl="4"><div class="logo">TaoLand</div></el-col>
+        <el-col :xs="20" :sm="4" :md="4" :lg="4" :xl="4"><div class="logo">cjl</div></el-col>
         <el-col :xs="0" :sm="20" :md="20" :lg="20" :xl="20">
           <el-menu
             :default-active="activeIndex"

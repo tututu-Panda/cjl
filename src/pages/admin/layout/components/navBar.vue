@@ -27,17 +27,21 @@ import imgDefault from "../../../../../static/img/avatar.png";
 
 export default {
 
-  data: {
-    avatar:"",
-    name:"",
-    token:"",
+  data() {
+    return {
+      // avatar: "",
+      name: "",
+      token: "",
 
+    }
   },
   computed: {
+    avatar:function () {
+      return this.$store.state.avatar =="null"?imgDefault:this.$store.state.avatar;
+    },
   },
   created() {
-    this.avatar = localStorage.getItem("avatar")=="null"?imgDefault:localStorage.getItem("avatar");
-    this.name = localStorage.getItem("user_name");
+    this.name = localStorage.getItem("nickName");
     this.token = localStorage.getItem("token");
   },
   methods: {
@@ -53,12 +57,13 @@ export default {
           token: that.token
         })
         .then(response => {
-          this.$message({
-            showClose: true,
-            message: '退出成功！',
-            type: 'success'
-          });
+            // localStorage.clear();
           if (response.data.status == 1) {
+            this.$message({
+              showClose: true,
+              message: '退出成功！',
+              type: 'success'
+            });
             this.$store.commit("changeIsSignIn", 0);
             this.$store.commit("changeIndex", "1");
             localStorage.clear();

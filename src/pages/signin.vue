@@ -122,6 +122,7 @@ export default {
             localStorage.setItem("user_name", response.data.user_name);
             localStorage.setItem("nickName", response.data.nickName);
             localStorage.setItem("avatar", response.data.avatar);
+            that.$store.state.avatar = response.data.avatar;
             localStorage.setItem("type", type);
             if (type == 1) {
               this.$store.commit("changeIsSignIn", 1); //admin

@@ -2,8 +2,7 @@
 const db = require('./db');
 const express = require('express');
 const router = express.Router();
-const jwt = require("jsonwebtoken");
-
+const path = require('path');
 
 // 检查用户是否为管理员，不是则不能请求数据
 router.post("/api/admin/*",(req,res,next)=>{
@@ -171,8 +170,6 @@ router.post('/api/admin/saveWebInfo',(req, res)=>{
 
 });
 
-
-
 // 更新关于我
 router.post('/api/admin/saveAboutMe',(req, res)=> {
   let _id = req.body._id;
@@ -218,8 +215,6 @@ console.log(_id);
 
 
 });
-
-
 
 // 更新管理员信息
 router.post('/api/admin/updateUser', (req, res) => {
@@ -269,5 +264,32 @@ router.post('/api/admin/updateUser', (req, res) => {
     })
 });
 
+
+// 检验用户密码是否正确
+router.post('/api/admin/checkPass', (req, res) => {
+  db.User.find({ name: req.body.name, token: req.body.token, password:req.body.pass }, (err, docs) => {
+    if(docs.length > 0){
+      res.send({'status':1});
+    }else{
+      res.send({'status':0});
+    }
+  });
+
+});
+
+
+// 更新用户密码
+router.post('/api/admin/updatePass', (req, res) => {
+  db.User.find({name: req.body.name, token: req.body.token}, (err, docs) => {
+    docs[0].password = req.body.pass;
+    db.User(docs[0]).save(function (err) {
+      if (err) {
+        res.status(500).send();
+        return
+      }
+      res.send({'status': 1, 'msg': '更新成功'});
+    })
+  });
+});
 
 module.exports = router;
