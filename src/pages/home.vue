@@ -2,6 +2,7 @@
   <div class="page">
       <div class="wrapper">
         <el-row>
+            <!--文章列表显示-->
             <el-col :xs="24" :sm="4" :md="18" :lg="18" :xl="18">
               <div class="main">
                 <div>
@@ -24,6 +25,8 @@
               </div>
             </el-col>
 
+
+<!--          webinfo-->
             <el-col :xs="0" :sm="4" :md="6" :lg="6" :xl="6">
               <div class="aside">
                 <div class="card">
@@ -58,8 +61,8 @@ import {webUrl} from "../../static/js/public.js"
 export default {
   data(){
     return{
-      items:[],
-      count:0,
+      items:[],       // 文章列表数据
+      count:0,        // 文章的总数
       currentPage:1,  // 初始化时的页码
       pagesize:4,     // 每页显示的个数
       // 网站内容
@@ -79,12 +82,14 @@ export default {
   },
   created(){
     // 首次创建时，请求数据
+    // webUrl == /api/
     this.$axios.post(webUrl+'articleList',{'pagesize':this.pagesize})
       .then((res)=>{
         this.items=res.data.data;
         this.count=res.data.count;
       });
 
+    // webInfo
     this.$axios.post(webUrl+'webInfo')
       .then((res) => {
         if(res.data[0]!=null){

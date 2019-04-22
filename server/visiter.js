@@ -218,12 +218,13 @@ router.post('/api/comment/reply', (req, res) => {
 
 
 //获取所有文章列表
+// req  请求的内容  res 返回的数据
 router.post('/api/articleList', (req, res) => {
   let page = req.body.page;
   page = page==="undefined"?1:page; // 获取当前页码
 
   let pageSize = req.body.pagesize;   //  每页显示的文章数
-  pageSize = pageSize==="undefined"?1:pageSize;   //  每页显示的文章数
+  pageSize = pageSize==="undefined"?5:pageSize;   //  每页显示的文章数
 
   // 获取总数
   const t = db.Article.find({});
@@ -233,13 +234,16 @@ router.post('/api/articleList', (req, res) => {
   });
 
 
-  // // 分页查询
+  // // 分页查询 (4)
+  // 1 2 3 4 5 6 7 8 9 10
   const m = db.Article.find({});
   const start = (page - 1) * pageSize;    // 计算查询位置（分页）
-  m.sort({"date":'desc'});
-  m.skip(start);
+  m.sort({"date":'desc'});  // 新增的时间，进行降序排序
+  m.skip(start);            // 跳过去的数据总数
   m.limit(pageSize);                      // 查询大小
 
+  // function(err, data){}
+  //
 
   m.exec((err, data) => {
         if (err) {
@@ -248,11 +252,11 @@ router.post('/api/articleList', (req, res) => {
         }
 
         for (let i = 0; i < data.length; i++) {
-            data[i]["comments"] = data[i]["comments"].length;
+            data[i]["comments"] = data[i]["comments"].length;   // 评论长度
             data[i]["content"] = null;
         }
         res.send({"data":data,"count":count});
-    })
+  })
 
 });
 
@@ -267,25 +271,28 @@ router.post('/api/archives',function(req,res){
         res.send(err);
         return
     }
-    let arr = [];
+    let arr = [];     // 年份数组
     let data_archives = [];
 
     for (let i = 0; i < data.length; i++) {
         let date = data[i]["date"].slice(0, 4);
 
-        if (arr.indexOf(date) == -1) {
-            let obj = {
-                "type": date,
-                "list": [{
+        if (arr.indexOf(date) == -1) {    // 当前 “年" 没有（2019）
+            let obj = {                   // 重新组装数组
+                "type": date,             // 2019
+                "list": [{                // 下面的数组
                     "_id": data[i]['_id'],
                     "date": data[i]['date'],
                     "title": data[i]['title'],
                     "category": data[i]['category']
                 }]
             };
-            data_archives.push(obj);
-            arr.push(date);
-        } else {
+            data_archives.push(obj);    // 存储的数据集列表
+            arr.push(date);             // 2019已经有了
+        }
+
+
+        else {
             let obj = {
                 "_id": data[i]['_id'],
                 "date": data[i]['date'],
@@ -435,5 +442,38 @@ router.post('/api/aboutMe', (req, res) => {
   });
 });
 
+
+// 分类列表
+router.post('/api/catetoryList',(req, res) => {
+  let page = req.body.page;
+  page = page==="undefined"?1:page; // 获取当前页码
+
+  let pageSize = req.body.pagesize;   //  每页显示的文章数
+  pageSize = pageSize==="undefined"?5:pageSize;   //  每页显示的文章数
+
+  // 获取总数
+  const t = db.Category.find({});
+  let count;
+  t.exec(function (err, data) {
+    count = data.length;
+  });
+
+
+  const m = db.Category.find({});
+  const start = (page - 1) * pageSize;    // 计算查询位置（分页）
+  m.skip(start);            // 跳过去的数据总数
+  m.limit(pageSize);                      // 查询大小
+
+
+  m.exec((err, data) => {
+        if (err) {
+            res.send(err);
+            return
+        }
+        res.send({"data":data,"count":count});
+  })
+
+
+});
 
 module.exports = router;

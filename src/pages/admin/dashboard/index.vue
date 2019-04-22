@@ -245,10 +245,12 @@
               let image = new Image();
               image.src = e.target.result; //原始base64
               image.setAttribute("crossOrigin", "anonymous"); //允许图片跨域请求、必须后台也允许
+
               image.onload = () => {
                 let base64 = imgTo64(image); //使用cavas压缩
                 that.ruleForm.photo = base64;
               };
+
             };
           } else {
             this.$message({

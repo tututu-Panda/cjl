@@ -57,6 +57,12 @@ const webSchema = new mongoose.Schema({
 const aboutmeSchema = new mongoose.Schema({
   content:String,
 });
+
+// 文章分类
+const categorySchema = new mongoose.Schema({
+  category:String,
+});
+
 /************** 定义模型Model **************/
 // const Models = {
 //     Login : mongoose.model('Login',loginSchema)
@@ -67,7 +73,8 @@ const Models = {
     Article: mongoose.model('Article', articleSchema),
     Demo: mongoose.model('Demo', demoSchema),
     Web : mongoose.model('Web',webSchema),
-    Aboutme : mongoose.model('Aboutme',aboutmeSchema)
+    Aboutme : mongoose.model('Aboutme',aboutmeSchema),
+    Category:mongoose.model('Category',categorySchema)
 
 }
 

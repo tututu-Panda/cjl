@@ -21,7 +21,7 @@
       </el-menu-item>
       <el-menu-item index="4">
         <i class="el-icon-setting"></i>
-        <span slot="title">标签管理</span>
+        <span slot="title"><router-link class="menu-style" :to="{ path: '/admin/label' }">标签管理</router-link></span>
       </el-menu-item>
       <el-menu-item index="5">
         <i class="el-icon-setting"></i>

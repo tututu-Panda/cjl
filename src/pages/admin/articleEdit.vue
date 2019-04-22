@@ -159,7 +159,7 @@ import {checkAdmin,webUrl} from '../../../static/js/public.js'
       },
       // 保存成功后跳转至文章列表页
       refreshArticleList: function () {
-        this.$router.push({name:'ArticleList'})
+        this.$router.push({name:'list'})
       },
       goBack: function () {
         this.$router.go(-1)

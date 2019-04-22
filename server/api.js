@@ -292,4 +292,90 @@ router.post('/api/admin/updatePass', (req, res) => {
   });
 });
 
+
+
+// 文章分类管理
+router.post('/api/admin/updateCategory', (req, res) => {
+  const _id = req.body._id;
+  const categoryName = req.body.category;
+
+  // 插入操作
+  if(_id==="" || _id === undefined) {
+    db.Category.find({ category: categoryName }, (err, docs) => {
+
+      if (err) {
+            return
+      }
+
+      // 已经存在分类
+      if(docs.length > 0){
+         res.send({'status': 0, 'msg': '添加失败，已经存在该分类！'})
+      }
+      // 进行添加
+      else{
+        let category = new db.Category({
+              category: categoryName,
+        });
+        db.Category(category).save(function (err) {
+          if (err) {
+            res.send({'status': 0, 'msg': '系统错误'});
+            return
+          }
+          res.send({'status': 1, 'msg': '添加成功'})
+        })
+      }
+
+    });
+
+  }
+  // 更新操作
+  else{
+    db.Category.find({ _id: _id }, (err, docs) => {
+        if (err) {
+            return
+        }
+        if(docs.length > 0){
+
+          db.Category.find({ category: categoryName }, (err, docs) => {
+             // 已经存在分类
+              if(docs.length > 0){
+                 res.send({'status': 0, 'msg': '更新失败，已经存在该分类！'})
+              }
+              else{
+                // 进行更新操作
+                docs[0].category = categoryName;
+                db.Category(docs[0]).save(function (err) {
+                    if (err) {
+                        res.status(500).send();
+                        return
+                    }
+                    res.send({ 'status': 1, 'msg': '更新成功' })
+                })
+
+              }
+          });
+
+        }else{
+          res.send({'status': 0, 'msg': '更新失败'});
+        }
+    })
+  }
+});
+
+
+// 删除文章分类
+router.post('/api/admin/deleteCategory', (req, res) => {
+  const _id = req.body._id;
+
+  db.Category.remove({ _id: _id },(err) => {
+      if (err) {
+          res.send({'status': 0, 'msg': '更新失败'});
+          return
+      }
+      res.send({ 'status': 1, 'msg': '删除成功' })
+  })
+
+
+});
+
 module.exports = router;

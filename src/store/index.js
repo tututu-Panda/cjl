@@ -9,7 +9,7 @@ export default new Vuex.Store({
   state: {
     activeIndex: '1',//导航选中
     isSignIn: 0,//0未登录，1admin，2游客\
-    avatar:'',
+    avatar:'',  // 后台显示的头像，更新的话，所有组件同时更新
   },
   modules:{
     app,

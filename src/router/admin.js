@@ -16,7 +16,7 @@ export  default [
 
       {
         path:'dashboard',
-        name:'控制面板',
+        name:'dashboard',
         meta:
         {
           requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
@@ -25,7 +25,7 @@ export  default [
       },
       {
         path:'adminInfo',
-        name:'管理员信息',
+        name:'adminInfo',
         meta:
         {
           requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
@@ -34,7 +34,7 @@ export  default [
       },
       {
         path:'aboutMe',
-        name:'关于我',
+        name:'aboutMe',
         meta:
         {
           requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
@@ -42,8 +42,17 @@ export  default [
         component:() => import('@/pages/admin/aboutMe/index'),
       },
       {
+        path:'label',
+        name:'label',
+        meta:
+        {
+          requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        },
+        component:() => import('@/pages/admin/label/index'),
+      },
+      {
         path:'list',
-        name:'文章列表',
+        name:'list',
         meta:
         {
           requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的

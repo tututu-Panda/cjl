@@ -34,68 +34,6 @@ export default {
       articleId: null,
       prev: {},
       next: {}
-      // comments: [
-      //   {
-      //     id: 0,
-      //     from_uid: 11111,
-      //     from_uname: "非洲刘德华",
-      //     avatar: avatar,
-      //     to_uid: null,
-      //     content: "啊十分大师傅",
-      //     date: "2018-07-18 20:12",
-      //     open:false,
-      //     child: [
-      //       {
-      //         from_uid: 2222,
-      //         from_uname: "乌鸦坐飞机",
-      //         avatar: avatar,
-      //         to_uid: 1111,
-      //         to_uname: "非洲刘德华",
-      //         content: "asdf撒旦飞洒发的",
-      //         date: "2018-07-18 20:12"
-      //       }
-      //     ]
-      //   },
-      //   {
-      //     id: 1,
-      //     from_uid: 11111,
-      //     from_uname: "非洲刘德华",
-      //     avatar: avatar,
-      //     to_uid: null,
-      //     content: "啊十分大师傅",
-      //     date: "2018-07-18 20:12",
-      //     open:false,
-      //     child: [
-      //       {
-      //         from_uid: 2222,
-      //         from_uname: "乌鸦坐飞机",
-      //         avatar: avatar,
-      //         to_uid: 1111,
-      //         to_uname: "非洲刘德华",
-      //         content: "asdf撒旦飞洒发的",
-      //         date: "2018-07-18 20:12"
-      //       },
-      //       {
-      //         from_uid: 3333,
-      //         from_uname: "飞机",
-      //         avatar: avatar,
-      //         to_uid: 11111,
-      //         to_uname: "非洲刘德华",
-      //         content: "asdf撒旦飞洒发的",
-      //         date: "2018-07-18 20:12"
-      //       },
-      //       {
-      //         from_uid: 11111,
-      //         from_uname: "非洲刘德华",
-      //         avatar: avatar,
-      //         to_uid: 2222,
-      //         to_uname: "乌鸦坐飞机",
-      //         content: "asdf撒旦飞洒发的",
-      //         date: "2018-07-18 20:12"
-      //       }
-      //     ]
-      //   }
-      // ]
     };
   },
   beforeCreate() {

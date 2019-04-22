@@ -42,7 +42,7 @@
             label="分类"
             width="250">
             <template slot-scope="scope">
-              <span v-if="scope.row.category.length === 0">未分类</span>
+                <span v-if="scope.row.category.length === 0">未分类</span>
               <el-tag v-else class="tag_margin" type="primary" v-for="tag in scope.row.category" :key="tag.id">{{ tag }}</el-tag>
             </template>
         </el-table-column>
@@ -209,7 +209,6 @@ export default {
       this.$axios.post(webUrl+'articleList',{"page":page,'pagesize':this.pagesize})
       .then((res)=>{
         this.articleList=res.data.data;
-        this.count=res.data.count;
       })
     },
     toggle() {
@@ -305,7 +304,7 @@ export default {
       // 更新数据
       this.$axios.post(webUrl + "articleList").then(res => {
         if (res) {
-          this.articleList = res.data.reverse();
+          this.articleList = res.data;
         }
       });
     },
@@ -313,7 +312,7 @@ export default {
       // 更新数据---demo
       this.$axios.post(webUrl + "demoList").then(res => {
         if (res) {
-          this.demoList = res.data.reverse();
+          this.demoList = res.data;
         }
       });
     }

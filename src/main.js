@@ -33,7 +33,7 @@ Vue.use(mavonEditor)
 router.beforeEach((to, from, next) => {
     if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限
       //console.log(store.state.isSignIn);
-        if (store.state.isSignIn == 1) {  // 通过vuex state获取当前的token是否存在
+        if (store.state.isSignIn == 1) {  // 通过vuex state获取isSignIn,判断是不是管理员
             next();
         }
         else {
@@ -51,9 +51,9 @@ new Vue({
     return {
     }
   },
-  router,
+  router,   //  路由控制
 //   axios,
-  store,
+  store,    // 所有组件共享的资源
   // watch:{
   //   '$route'(to,from){
   //      console.log(to)

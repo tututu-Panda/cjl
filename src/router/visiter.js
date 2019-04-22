@@ -14,7 +14,7 @@ const VisiterIndex = r => require.ensure([], () => r(require('@/pages/visiter/in
 export  default [
   {
     path: '/',
-    component: CommonLayout,
+    component: CommonLayout,    // 组件下面又包含一个组件，通过router-view显示
     children:[
       {
         path: '',
