@@ -5,13 +5,13 @@
             <el-col :xs="24" :sm="4" :md="18" :lg="18" :xl="18">
               <div class="main">
                 <p class="title">Categories</p>
-                <list_article :items="items" type="categories"></list_article>
+                <list_article :items="items" :categoryList="categoryList" type="categories"></list_article>
               </div>
             </el-col>
             <el-col :xs="0" :sm="4" :md="6" :lg="6" :xl="6">
               <div class="aside">
                 <p class="title">Content</p>
-                <list_content :items="items"></list_content>
+                <list_content :items="items" :categoryList="categoryList" type="categories"></list_content>
               </div>
             </el-col>
         </el-row>
@@ -27,7 +27,8 @@ import {webUrl} from "../../static/js/public.js"
 export default {
   data(){
     return{
-      items:[]
+      items:[],
+      categoryList:[],
     }
   },
   components:{
@@ -35,15 +36,18 @@ export default {
     List_content
   },
   created(){
-    // this.$axios.get('http://localhost:8080/static/goods.json').then((data)=>{
-    // // this.$axios.get('./static/goods.json').then((data)=>{
-    //   console.log(data)
-    //   this.items=data.data.categories;
-    // })
     this.$axios.post(webUrl+'categories',{'type':'categories'})
       .then((res)=>{
         this.items=res.data;
-      })
+      });
+
+    // 获取分类列表
+    this.$axios.post('/api/categoryAll')
+      .then((response) =>{
+        this.categoryList = response.data;
+        console.log(this.categoryList);
+    });
+
   }
 }
 </script>

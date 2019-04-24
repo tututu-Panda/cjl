@@ -1,22 +1,28 @@
 <template>
 <div>
   <div class="card" v-for="(item) in items" :key="item.id">
-    <p class="card_title" :id="'anchor-'+item.type">{{item.type}}</p>
+    <p v-if="type=='archives'" class="card_title" :id="'anchor-'+item.type">{{item.type}}</p>
+    <p v-else-if="type=='categories'" class="card_title" :id="'anchor-'+item.type">
+      <span v-for="cate in categoryList" v-if="cate._id == item.type">{{cate.category}}</span>
+    </p>
     <ul>
       <li v-for="li in item.list" :key="li.id">
         <span class="date">{{li.date}}</span>
         <router-link :to="'/detail/'+li._id"  class="title">{{ li.title }}</router-link>
-        <!-- <router-link v-if="type=='archives'" @click='goCategory' to="/categories"  class="category"><i class="iconfont icon-tubiao13"></i><span class="link">{{ li.category }}</span></router-link> -->
         <a v-if="type=='archives'" href="javascript:;" @click='goCategory()' class="category">
           <i class="iconfont icon-tubiao13"></i>
           <template v-for="tag in li.category">
-            <span class="link" :key="tag.id">{{ tag }}</span>
+            <span class="link" :key="tag.id">
+              <span v-for="cate in categoryList" v-if="cate._id == tag">{{cate.category}}</span>
+            </span>
           </template>
         </a>
         <a v-else-if="type=='categories'" href="javascript:;" class="category">
           <i class="iconfont icon-tubiao13"></i>
           <template v-for="tag in li.category">
-            <span class="link" :key="tag.id" @click="anchor(tag)">{{ tag }}</span>
+            <span class="link" :key="tag.id" @click="anchor(tag)">
+              <span v-for="cate in categoryList" v-if="cate._id == tag">{{cate.category}}</span>
+            </span>
           </template>
         </a>
       </li>
@@ -27,12 +33,13 @@
 
 <script>
 export default {
-  // data(){
-  //   return{
-  //     list:[]
-  //   }
-  // },
-  props: ['items','type'],  
+  data(){
+    return{
+    }
+  },
+  props: ['items','type','categoryList'],
+  created(){
+  },
   methods:{
     goCategory:function(e){
       this.$store.commit('changeIndex','3')

@@ -4,7 +4,12 @@
       <h1 class="title">{{title}}</h1>
       <div class="some">
         <span class="date"><i class="iconfont icon-date"></i>{{date}}</span>
-        <span class="category"><i class="iconfont icon-tubiao13"></i><span v-for="tag in category" :key="tag.id">{{tag}}</span></span>
+        <span class="category">
+          <i class="iconfont icon-tubiao13"></i>
+          <span v-for="tag in category" :key="tag.id">
+            <span v-for="cate in categoryList" v-if="cate._id == tag">{{cate.category}}</span>
+          </span>
+        </span>
       </div>
       <div class="detail" v-if="content">
           <mavon-editor v-model="content" default_open="preview" defaultOpen= "preview"  :toolbarsFlag="false" :subfield="false"></mavon-editor>
@@ -27,6 +32,7 @@ export default {
     return {
       title: "",
       date: "",
+      categoryList:[],
       category: [],
       gist: "",
       content: "",
@@ -41,6 +47,16 @@ export default {
   },
   mounted: function() {
     this.init();
+    this.$axios.post('/api/categoryAll')
+      .then((response) =>{
+        let c = response.data;
+        this.categoryList = c;
+        // let that = this;
+        // c.forEach(function (item) {
+        //   that.categorys.push(item.category);
+        //   // console.log(item.category);
+        // });
+    });
   },
   methods: {
     init: function() {

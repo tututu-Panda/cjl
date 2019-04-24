@@ -1,9 +1,17 @@
 <template>
   <div class="content">
-    <ul>
+    <ul v-if="type=='archives'">
       <li v-for="(li) in items" :key="li.id">
         <!-- <a :href="'#anchor-'+li.type" class="title">{{li.type}} ( {{li.list.length}} )</a> -->
         <a href="javascript:;" @click="anchor(li.type)" class="title">{{li.type}} ( {{li.list.length}} )</a>
+        </li>
+    </ul>
+
+    <ul v-else-if="type=='categories'">
+      <li v-for="(li) in items" :key="li.id">
+        <a href="javascript:;" @click="anchor(li.type)" class="title">
+           <span v-for="cate in categoryList" v-if="cate._id == li.type">{{cate.category}}( {{li.list.length}} )</span>
+        </a>
         </li>
     </ul>
   </div>
@@ -31,7 +39,7 @@ export default {
     //   });
     // }
   },
-  props: ['items']   /*  props是子组件获取父组件数据用的 */
+  props: ['items','type','categoryList']   /*  props是子组件获取父组件数据用的 */
 }
 </script>
 

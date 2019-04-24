@@ -277,6 +277,7 @@ router.post('/api/archives',function(req,res){
     for (let i = 0; i < data.length; i++) {
         let date = data[i]["date"].slice(0, 4);
 
+
         if (arr.indexOf(date) == -1) {    // 当前 “年" 没有（2019）
             let obj = {                   // 重新组装数组
                 "type": date,             // 2019
@@ -443,7 +444,7 @@ router.post('/api/aboutMe', (req, res) => {
 });
 
 
-// 分类列表
+// 分类分页列表
 router.post('/api/catetoryList',(req, res) => {
   let page = req.body.page;
   page = page==="undefined"?1:page; // 获取当前页码
@@ -473,6 +474,20 @@ router.post('/api/catetoryList',(req, res) => {
         res.send({"data":data,"count":count});
   })
 
+
+});
+
+// 获取所有分类
+router.post('/api/categoryAll', (req, res) =>{
+
+  const t = db.Category.find({});
+  t.exec(function (err, data) {
+    if (err) {
+            res.send(err);
+            return
+        }
+        res.send(data);
+  });
 
 });
 

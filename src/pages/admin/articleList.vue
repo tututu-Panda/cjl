@@ -43,7 +43,9 @@
             width="250">
             <template slot-scope="scope">
                 <span v-if="scope.row.category.length === 0">未分类</span>
-              <el-tag v-else class="tag_margin" type="primary" v-for="tag in scope.row.category" :key="tag.id">{{ tag }}</el-tag>
+              <el-tag v-else class="tag_margin" type="primary" v-for="tag in scope.row.category" :key="tag.id">
+                <span v-for="cate in categoryList" v-if="cate._id == tag">{{cate.category}}</span>
+              </el-tag>
             </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -149,6 +151,7 @@ export default {
     return {
       articleList: [],
       demoList: [],
+      categoryList:[],
       type: "article",
       count:0,
       currentPage:1,  // 初始化时的页码
@@ -175,6 +178,12 @@ export default {
       if (res) {
         this.demoList = res.data.reverse();
       }
+    });
+
+    // 获取分类列表
+    this.$axios.post('/api/categoryAll')
+      .then((response) =>{
+        this.categoryList = response.data;
     });
 
   },

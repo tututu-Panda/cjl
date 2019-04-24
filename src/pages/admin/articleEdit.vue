@@ -8,7 +8,7 @@
       <div class="category">
         <div class="edit_head">分类</div>
         <el-checkbox-group v-model="category">
-          <el-checkbox v-for="category in categorys" :label="category" :key="category">{{category}}</el-checkbox>
+          <el-checkbox v-for="cate in categorys" :label="cate._id" :key="cate._id">{{cate.category}}</el-checkbox>
         </el-checkbox-group>
       </div>
       <div class="edit_head">简介</div>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import {checkAdmin,webUrl} from '../../../static/js/public.js'
+import {webUrl} from '../../../static/js/public.js'
 
   export default {
     data() {
@@ -39,13 +39,24 @@ import {checkAdmin,webUrl} from '../../../static/js/public.js'
         category:[],
         gist: '',
         content: '',
-        categorys:['JavaScript','ES6','jQuery','css','ajax',
-        'http','https','websocket','apache','Vue','react','react-native',
-        'android','node','mongo','CentOS','webpack',
-        'NW.js','Electron','easyUI','ECharts','wx','HBuilder']
+        categorys:[]
+        // categorys:['JavaScript','ES6','jQuery','css','ajax',
+        // 'http','https','websocket','apache','Vue','react','react-native',
+        // 'android','node','mongo','CentOS','webpack',
+        // 'NW.js','Electron','easyUI','ECharts','wx','HBuilder']
       }
     },
-    beforeCreate:function(){
+    created:function(){
+      this.$axios.post('/api/categoryAll')
+          .then((response) =>{
+            let c = response.data;
+            this.categorys = c;
+            // let that = this;
+            // c.forEach(function (item) {
+            //   that.categorys.push(item.category);
+            //   // console.log(item.category);
+            // });
+        });
     },
     mounted: function () {
       if (this.$route.params.id) {
@@ -64,6 +75,7 @@ import {checkAdmin,webUrl} from '../../../static/js/public.js'
               // }, 500);
             }
           );
+
       }
     },
     methods: {
@@ -122,6 +134,8 @@ import {checkAdmin,webUrl} from '../../../static/js/public.js'
             content: this.content,
             // html:document.querySelector('.v-show-content').innerHTML
           }
+
+          // console.log(this.category);
           
           this.$axios.post(webUrl+'admin/updateArticle', {articleInformation: obj})
             .then(
