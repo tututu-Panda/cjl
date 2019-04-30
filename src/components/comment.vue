@@ -14,25 +14,25 @@
         <p class="output_header">全部评论 <span class="total">{{comments.length}}</span> 条</p>
         <div class="output_body">
           <div v-for="(comment,index) in comments" :key="comment.id" class="floor">
-            <div class="floor_l"><img class="avatar" :src="comment.avatar!='null'?comment.avatar:imgDefault" alt=""><p class="from_uname">{{comment.from_uname}}</p></div>
+            <div class="floor_l"><img class="avatar" :src="comment.avatar!='null'?comment.avatar:imgDefault" alt=""><p class="from_uname">{{comment.user_name}}</p></div>
             <div class="floor_r">
               <div class="comment">
                 <div class="comment_main">{{comment.content}}</div>
                 <div class="comment_bar">
                   <span class="date">{{comment.date}}</span>
-                  <a @click="setTextarea(index,true,comment.from_uid,comment.from_uname)" href="javascript:;" class="replay_btn">回复</a>
+                  <a @click="setTextarea(index,true,comment.userId,comment.user_name)" href="javascript:;" class="replay_btn">回复</a>
                 </div>
                 <div v-if="comment.child.length>0" class="comment_replay__main">
                   <div v-for="(replay,index2) in comment.child" :key="index2" class="comment_replay__floor">
-                    <div class="floor_l"><img class="avatar" :src="replay.avatar!='null'?replay.avatar:imgDefault" alt=""></div>
+                    <div class="floor_l"><img class="avatar" :src="replay.fromUserAvatar!='null'?replay.fromUserAvatar:imgDefault" alt=""></div>
                     <div class="floor_r">
                       <p class="content">
-                        <span class="from_name">{{replay.from_uname}}</span>回复<span class="to_name">{{replay.to_uname}}</span> ：
+                        <span class="from_name">{{replay.fromUserName}}</span>回复<span class="to_name">{{replay.toUserName}}</span> ：
                         {{replay.content}}
                       </p>
                       <div class="footer">
                         <span class="date">{{replay.date}}</span>
-                        <a @click="setTextarea(index,true,replay.from_uid,replay.from_uname)" href="javascript:;" class="replay_btn">回复</a>
+                        <a @click="setTextarea(index,true,replay.from_uid,replay.fromUserName)" href="javascript:;" class="replay_btn">回复</a>
                       </div>
                     </div>
                   </div>
@@ -61,6 +61,7 @@ export default {
   data() {
     return {
       nickName: null,
+      userId: null,
       avatar: null,
       name: null,
       token: null,
@@ -83,8 +84,9 @@ export default {
     this.avatar = localStorage.getItem("avatar");
     this.name = localStorage.getItem("user_name");
     this.token = localStorage.getItem("token");
+    this.userId = localStorage.getItem("_id");
 
-    // console.log(getDate())
+    // console.log(this.userId)
   },
   methods: {
     signIn: function() {
@@ -96,29 +98,44 @@ export default {
       let obj = {
         _id: that.articleId, //文章id
         id: Guid(), //评论id
-        from_uid: that.name,
-        from_uname: that.nickName,
-        avatar: that.avatar,
+        // from_name: that.name,
+        fromId:that.userId,
         content: that.submitTxt,
         date: getDate()
       };
 
-      that.$axios
-        .post(webUrl + "comment/new", {
-          ...obj
-        })
-        .then(response => {
-          that.$message({
-            type: "success",
-            message: response.data.msg
-          });
-          if (response.data.status == 1) {
+      that.$axios.post(webUrl+'comment/new',{...obj})
+        .then(res => {
+          if(res.data.status == 1){
+            that.$message({
+              type: "success",
+              message: res.data.msg
+            });
             this.$emit("update");
+          }else{
+            that.$message({
+              type: "warning",
+              message: res.data.msg
+            });
           }
-        })
-        .catch(reject => {
-          console.log(reject);
         });
+
+      // that.$axios
+      //   .post(webUrl + "comment/new", {
+      //     ...obj
+      //   })
+      //   .then(response => {
+      //     that.$message({
+      //       type: "success",
+      //       message: response.data.msg
+      //     });
+      //     if (response.data.status == 1) {
+      //       this.$emit("update");
+      //     }
+      //   })
+      //   .catch(reject => {
+      //     console.log(reject);
+      //   });
     },
     submit_reply: function(id, to_uid, to_uname, textArea) {
       //回复别人评论
@@ -126,11 +143,13 @@ export default {
       let obj = {
         _id: that.articleId, //文章id
         id: id, //评论id
-        from_uid: that.name,
-        from_uname: that.nickName,
-        avatar: that.avatar,
-        to_uid: to_uid,
-        to_uname: to_uname,
+        from_uid:that.userId,
+        to_uid:to_uid,
+        // from_uid: that.name,
+        // from_uname: that.nickName,
+        // avatar: that.avatar,
+        // to_uid: to_uid,
+        // to_uname: to_uname,
         content: textArea,
         date: getDate()
       };
@@ -140,12 +159,18 @@ export default {
           ...obj
         })
         .then(response => {
-          that.$message({
-            type: "success",
-            message: response.data.msg
-          });
+
           if (response.data.status == 1) {
+            that.$message({
+              type: "success",
+              message: response.data.msg
+            });
             this.$emit("update");
+          }else{
+            that.$message({
+              type: "warning",
+              message: response.data.msg
+            });
           }
         })
         .catch(reject => {

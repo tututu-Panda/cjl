@@ -41,7 +41,7 @@ export default {
     },
   },
   created() {
-    this.name = localStorage.getItem("nickName");
+    this.name = localStorage.getItem("user_name");
     this.token = localStorage.getItem("token");
   },
   methods: {

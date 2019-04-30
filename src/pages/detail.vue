@@ -24,10 +24,10 @@
 </template>
 
 <script>
-import Comment from "../components/comment";
-import { webUrl } from "../../static/js/public.js";
+  import Comment from "../components/comment";
+  import {webUrl} from "../../static/js/public.js";
 
-export default {
+  export default {
   data() {
     return {
       title: "",
@@ -49,8 +49,7 @@ export default {
     this.init();
     this.$axios.post('/api/categoryAll')
       .then((response) =>{
-        let c = response.data;
-        this.categoryList = c;
+        this.categoryList = response.data;
         // let that = this;
         // c.forEach(function (item) {
         //   that.categorys.push(item.category);
@@ -87,8 +86,8 @@ export default {
             if (comments) {
               for (let i = 0; i < comments.length; i++) {
                 comments[i]["open"] = false;
-                comments[i]["to_uid"] = comments[i]["from_uid"];
-                comments[i]["to_uname"] = comments[i]["from_uname"];
+                comments[i]["to_uid"] = comments[i]["userId"];
+                comments[i]["toUserName"] = comments[i]["user_name"];
               }
               this.comments = comments;
             }

@@ -63,6 +63,17 @@ const categorySchema = new mongoose.Schema({
   category:String,
 });
 
+
+// 回复内容
+const replySchema = new mongoose.Schema({
+  content:String,
+  quesId:String,
+  userId:String,
+  child:Array,
+  createDate:String
+});
+
+
 /************** 定义模型Model **************/
 // const Models = {
 //     Login : mongoose.model('Login',loginSchema)
@@ -74,7 +85,8 @@ const Models = {
     Demo: mongoose.model('Demo', demoSchema),
     Web : mongoose.model('Web',webSchema),
     Aboutme : mongoose.model('Aboutme',aboutmeSchema),
-    Category:mongoose.model('Category',categorySchema)
+    Category:mongoose.model('Category',categorySchema),
+    reply:mongoose.model('Reply',replySchema)
 
 }
 

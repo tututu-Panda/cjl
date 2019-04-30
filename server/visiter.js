@@ -70,7 +70,7 @@ router.post('/api/signIn', (req, res) => {
                     res.status(500).send();
                     return
                 }
-                res.send({ 'status': 1, 'msg': '登陆成功', 'token': docs[0].token, 'user_name': docs[0]["name"], 'type': docs[0]["type"], 'nickName': docs[0]["nickName"], 'avatar': docs[0]["avatar"] })
+                res.send({ 'status': 1, 'msg': '登陆成功','_id':docs[0]._id, 'token': docs[0].token, 'user_name': docs[0]["name"], 'type': docs[0]["type"], 'nickName': docs[0]["nickName"], 'avatar': docs[0]["avatar"] })
                 // console.log("tttt"+ req.session.type)
             })
         } else {
@@ -173,13 +173,21 @@ router.post('/api/updateUser', (req, res) => {
 });
 
 //评论--新建
-router.post('/api/comment/new', (req, res) => {
-    db.Article.find({ _id: req.body._id }, (err, docs) => {
+router.post('/api/comment/new',(req, res) => {
+
+
+  // 请求数据
+  const userId = req.body.fromId;
+  const articleId = req.body._id;
+  const content = req.body.content;
+  const date = req.body.date;
+  const id = req.body.id;
+
+  db.Article.find({ _id: articleId }, (err, docs) => {
         if (err) {
             return
         }
-        let { id, from_uid, from_uname, avatar, content, date } = req.body;
-        let obj = { id, from_uid, from_uname, avatar, content, date, child: [] };
+        let obj = { id, userId,content, date, child: [] };
 
         docs[0].comments.push(obj);
         db.Article(docs[0]).save(function (err) {
@@ -190,6 +198,10 @@ router.post('/api/comment/new', (req, res) => {
             res.send({ 'status': 1, 'msg': '发表成功' })
         })
     })
+
+
+
+
 });
 //评论--回复
 router.post('/api/comment/reply', (req, res) => {
@@ -197,8 +209,10 @@ router.post('/api/comment/reply', (req, res) => {
         if (err) {
             return
         }
-        let { id, from_uid, from_uname, avatar, to_uid, to_uname, content, date } = req.body;
-        let obj = { from_uid, from_uname, avatar, to_uid, to_uname, content, date };
+        // let { id, from_uid, from_uname, avatar, to_uid, to_uname, content, date } = req.body;
+        // let obj = { from_uid, from_uname, avatar, to_uid, to_uname, content, date };
+        let { id, from_uid,  to_uid, content, date } = req.body;
+        let obj = { from_uid, to_uid, content, date };
         let comments = docs[0].comments;
 
         for (let i = 0; i < comments.length; i++) {
@@ -277,6 +291,15 @@ router.post('/api/archives',function(req,res){
     for (let i = 0; i < data.length; i++) {
         let date = data[i]["date"].slice(0, 4);
 
+        // // 查找分类id，获取名称
+        // db.Category.find({'_id':data[i]['category']}, (err1, data1) => {
+        //   if(data1[0]['category'] != 'undefined'){
+        //     console.log(data1[0]['category']);
+        //     // data[i]['category'] = data1[0]['category'];
+        //   }
+        // });
+        //
+        // // console.log("0"+data[i]['category']);
 
         if (arr.indexOf(date) == -1) {    // 当前 “年" 没有（2019）
             let obj = {                   // 重新组装数组
@@ -364,11 +387,49 @@ router.post('/api/categories',function(req,res){
 
 // 文章详情页
 router.get('/api/articleDetail/:id', function (req, res) {
-    db.Article.findOne({ _id: req.params.id }, function (err, docs) {
+    db.Article.findOne({ _id: req.params.id },async function (err, docs) {
         if (err) {
             console.error(err)
             return
         }
+
+        // 转换为json，才能进行编辑操作
+        let obj = JSON.parse(JSON.stringify(docs));
+
+        // 获取评论列表
+        let comments = obj.comments;
+        // console.log(comment);
+
+        // 遍历列表利用async同步获取用户信息
+        for(let i = 0; i < comments.length; i++){
+          let userInfo = await findUserInfo(comments[i].userId);
+          obj.comments[i].user_name = userInfo.nickName;
+          obj.comments[i].avatar = userInfo.avatar;
+
+          // 子评论
+          for(let j = 0; j < comments[i].child.length; j++){
+
+            let fromUser = await findUserInfo(comments[i].child[j].from_uid);
+            comments[i].child[j].fromUserName = fromUser.nickName;
+            comments[i].child[j].fromUserAvatar = fromUser.avatar;
+
+            let toUser = await findUserInfo(comments[i].child[j].to_uid);
+            comments[i].child[j].toUserName = toUser.nickName;
+            comments[i].child[j].toUserAvatar = toUser.avatar;
+          }
+
+        }
+
+
+        // 获取用户信息
+        async function findUserInfo(userId){
+           return new Promise(function (resolve, reject) {
+             db.User.findOne({_id:userId}, (err, data) => {
+               resolve(data);
+             });
+           })
+        }
+
         let prev = {};
         let next = {};
 
@@ -384,7 +445,6 @@ router.get('/api/articleDetail/:id', function (req, res) {
                             next.title = res3[res3.length - 1]["title"];
                             next._id = res3[res3.length - 1]["_id"];
                         }
-                        let obj = JSON.parse(JSON.stringify(docs));
                         obj.prev = prev;
                         obj.next = next;
                         res.send(obj)

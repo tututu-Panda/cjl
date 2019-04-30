@@ -119,6 +119,7 @@ export default {
 
             this.status = 3;
             localStorage.setItem("token", response.data.token);
+            localStorage.setItem("_id", response.data._id);
             localStorage.setItem("user_name", response.data.user_name);
             localStorage.setItem("nickName", response.data.nickName);
             localStorage.setItem("avatar", response.data.avatar);
